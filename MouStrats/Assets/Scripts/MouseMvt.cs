@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class basicmvt : MonoBehaviour
+public class MouseMvt : MonoBehaviour
 {
     NavMeshAgent agent;
 
@@ -16,7 +16,7 @@ public class basicmvt : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
             PlayerMvt();
         }

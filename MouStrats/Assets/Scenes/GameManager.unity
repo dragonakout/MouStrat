@@ -474,6 +474,11 @@ PrefabInstance:
       propertyPath: gameStateManager
       value: 
       objectReference: {fileID: 1744260832}
+    - target: {fileID: 8494653296300048847, guid: c79621be7da643c45b09399c18655854,
+        type: 3}
+      propertyPath: mouseManager
+      value: 
+      objectReference: {fileID: 217603278}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c79621be7da643c45b09399c18655854, type: 3}
 --- !u!4 &8563517497072158149 stripped

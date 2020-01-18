@@ -1,18 +1,30 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
+// Gère tous les évènements dépassant le cadre d'une scène. Persistent d'une scène à l'autre
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] GameObject levelManager;
     [SerializeField] GameObject gameStateManager;
     [SerializeField] GameObject mouseManager;
+    [SerializeField] GameObject inGameResourceManager;
+    private static GameManager instance = null;
 
-    private List<GameObject> persistentObjects;
+    private List<GameObject> persistentManagers;
+    public static GameManager getInstance()
+    {
+        // YOLO, ne devrait pas être null
+        return instance;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
+        instance = this;
+        DontDestroyOnLoad(this);
         InitPersistentObjects();
     }
 
@@ -26,7 +38,14 @@ public class GameManager : MonoBehaviour
 
     private void InitPersistentObjects()
     {
-        persistentObjects = new List<GameObject>();
+        persistentManagers = new List<GameObject>();
+        persistentManagers.Add(gameStateManager);
+        persistentManagers.Add(mouseManager);
+        persistentManagers.Add(inGameResourceManager);
+
+        for (int i = 0; i < persistentManagers.Count; i++) {
+            DontDestroyOnLoad(persistentManagers[i]);
+        }
     }
 
     private Scene getCurrentScene()
@@ -36,5 +55,7 @@ public class GameManager : MonoBehaviour
 
 
     private void CheckPauseMenu() {
+        // TODO : PAUSE MENU
     }
+
 }

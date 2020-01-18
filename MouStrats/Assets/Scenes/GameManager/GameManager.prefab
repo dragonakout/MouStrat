@@ -43,3 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aab1de4aa27696a4bba2e9f283c74d31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelManager: {fileID: 0}
+  gameStateManager: {fileID: 0}
+  mouseManager: {fileID: 0}
+  inGameResourceManager: {fileID: 0}

@@ -9,10 +9,4 @@ public class HideMeshOnPlay : MonoBehaviour
     {
         GetComponent<MeshRenderer>().enabled = false;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

@@ -1,9 +1,9 @@
-﻿/*using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class PatrolBehaviour : MonoBehaviour
+public class enemy : MonoBehaviour
 {
     NavMeshAgent agent;
 
@@ -14,6 +14,7 @@ public class PatrolBehaviour : MonoBehaviour
     [SerializeField] float fov;
     [SerializeField] float passiveSpeed;
     [SerializeField] float aggressiveSpeed;
+    public float wanderRadius;
 
     public GameObject player; // TODO Should look for the player at Start
     private bool isPassive;
@@ -25,7 +26,7 @@ public class PatrolBehaviour : MonoBehaviour
     void Start()
     {
         // For now, each patrol need to have at least one waypoint
-        if(waypointList.Count == 0)
+        if (waypointList.Count == 0)
         {
             Destroy(gameObject);
         }
@@ -35,14 +36,14 @@ public class PatrolBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       // print(isPassive);
+        // print(isPassive);
         SearchForPlayer();
-        
+
         //TODO add a condition to check less often 
         if (isPassive)
         {
             SwitchDestinationPassive();
-            
+
         }
         else
         {
@@ -73,7 +74,7 @@ public class PatrolBehaviour : MonoBehaviour
         }
     }
 
-    /*public void SearchForPlayer()
+    public void SearchForPlayer()
     {
         if (Vector3.Angle(Vector3.forward, transform.InverseTransformPoint(player.transform.position)) < fov / 2)
         {
@@ -82,28 +83,14 @@ public class PatrolBehaviour : MonoBehaviour
             {
                 Debug.Log(3);
                 RaycastHit hit;
-                Debug.Log(Physics.Linecast(transform.position, player.transform.position, out hit, -1));
+                if(Physics.Linecast(transform.position, player.transform.position, out hit, -1))
                 {
+                    Debug.Log(hit.transform);
                     Debug.Log(2);
                     if (hit.transform.CompareTag("Player"))
                     {
                         Debug.Log(1);
                         AggressiveMode();
-
-
-                        //if (isPassive)
-                        //{
-                        //    print(Vector3.Angle(Vector3.forward, transform.InverseTransformPoint(player.transform.position)));
-                        //    print(Vector3.Distance(player.transform.position, transform.position));
-                        //
-                        //    print("isagresive");
-                        //
-                        //
-                        //    isDetecting = true;
-                        //    isPassive = false;
-                        //    agent.destination = player.transform.position;
-                        //    agent.speed = aggressiveSpeed;
-                        //}
                     }
                     else
                     {
@@ -114,6 +101,7 @@ public class PatrolBehaviour : MonoBehaviour
                 {
                     isDetecting = false;
                 }
+                    
             }
             else
             {
@@ -124,11 +112,10 @@ public class PatrolBehaviour : MonoBehaviour
         {
             isDetecting = false;
         }
-    /*}
+    }
 
     void AggressiveMode()
     {
-        Debug.Log("yo");
         isPassive = false;
         agent.destination = player.transform.position;
 
@@ -137,7 +124,6 @@ public class PatrolBehaviour : MonoBehaviour
             loseTimer += Time.deltaTime;
             if (loseTimer >= loseThreshold)
             {
-                print("is passive again");
                 isPassive = true;
                 agent.speed = passiveSpeed;
                 loseTimer = 0;
@@ -149,7 +135,6 @@ public class PatrolBehaviour : MonoBehaviour
 
     private void InitializeVar()
     {
-
         viewDistance = 3f;
         deltaPositionWaypoint = 0.2f;
         isPassive = true;
@@ -161,13 +146,29 @@ public class PatrolBehaviour : MonoBehaviour
         aggressiveSpeed = 1f;
         isDetecting = false;
         loseThreshold = 2f;
+        wanderRadius = 3;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    //se promene de facon aleatoire
+    public void Wander()
     {
-        if(collision.transform.CompareTag("Player"))
+        Vector3 wanderPoint = RandomWanderPoint();
+        if (Vector3.Distance(transform.position, wanderPoint) < 2f)
         {
-            print("dead");
+            wanderPoint = RandomWanderPoint();
+        }
+        else
+        {
+            agent.SetDestination(wanderPoint);
         }
     }
-}*/
+
+    //set la destination aleatoire du wander
+    public Vector3 RandomWanderPoint()
+    {
+        Vector3 randomPoint = (Random.insideUnitSphere * wanderRadius) + transform.position;
+        NavMeshHit navHit;
+        NavMesh.SamplePosition(randomPoint, out navHit, wanderRadius, -1);
+        return new Vector3(navHit.position.x, transform.position.y, navHit.position.z);
+    }
+}

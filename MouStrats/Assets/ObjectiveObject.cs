@@ -9,7 +9,8 @@ public abstract class ObjectiveObject : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other is LevelManager)
+        // TODO CHANGE NULL FOR PLAYER'S COLLIDER
+        if (other is null)
         {
             isCollected = true;
         }   

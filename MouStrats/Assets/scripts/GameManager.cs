@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject gameStateManager;
     [SerializeField] GameObject mouseManager;
     [SerializeField] GameObject inGameResourceManager;
+    [SerializeField] List<Scene> levels;
+    private int currentSceneIndex = 0;
     private static GameManager instance = null;
 
     private List<GameObject> persistentManagers;
@@ -48,14 +50,41 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private Scene getCurrentScene()
+    public Scene getCurrentScene()
     {
         return SceneManager.GetActiveScene();
     }
 
+    public Scene GetLevelByIndex(int index) {
+        if(index > 0 && index < levels.Count)
+        {
+            return levels[index];
+        }
+        return levels[0];
+    }
+
+    public void LoadNextLevel()
+    {
+        ChangeCurrentLevel(LevelNavigator.NEXT);
+        SceneManager.LoadScene(levels[currentSceneIndex].name);
+    }
+
+    private void ChangeCurrentLevel(LevelNavigator nav)
+    {
+        switch (nav)
+        {
+            case LevelNavigator.NEXT: { currentSceneIndex++; break; }
+            case LevelNavigator.PREVIOUS: { currentSceneIndex++; break; }
+        }
+    }
 
     private void CheckPauseMenu() {
         // TODO : PAUSE MENU
     }
+}
 
+public enum LevelNavigator
+{
+    PREVIOUS,
+    NEXT
 }
